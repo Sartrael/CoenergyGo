@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CordeiroCalc - Rentabilidade de Eletropostos</title>
+    <title>CoenergyGo - Rentabilidade de Eletropostos</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
@@ -30,7 +32,7 @@
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 min-h-screen pb-20">
-
+    <div id="relatorio-area" class="bg-slate-50 pt-8 px-8 pb-0">
     <!-- Header & Branding -->
     <header id="mainHeader" class="sticky top-0 z-50 glass-header border-b border-slate-100 py-2 mb-10 transition-all duration-300 ease-in-out">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center gap-5">
@@ -57,6 +59,18 @@
                 </h1>
                 <p class="text-xs font-medium text-gray-500 mt-1">Rentabilidade inteligente, sustentabilidade real.</p>
             </div>
+
+            <!-- BOTÃO DE EXPORTAÇÃO -->
+            <button 
+                onclick="exportReport()" 
+                data-html2canvas-ignore="true" 
+                class="ml-auto bg-orange-500 hover:bg-orange-600 active:scale-95 text-white px-5 py-2.5 rounded-xl font-bold text-xs transition-all flex items-center gap-2 shadow-lg shadow-orange-200"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                Baixar Relatório
+            </button>
         </div>
     </header>
 
@@ -187,6 +201,7 @@
         </div>
 
     </main>
+    </div> <!-- Fim relatorio-area -->
 
     <script>
         const inputs = [
@@ -371,6 +386,55 @@
         });
 
         inputs.forEach(id => document.getElementById(id).addEventListener('input', calculate));
+
+        // Lógica de Exportação de Relatório (PDF via html2canvas + jsPDF)
+        window.exportReport = function() {
+            const btn = document.querySelector('[data-html2canvas-ignore="true"]');
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = "Gerando PDF...";
+            btn.disabled = true;
+
+            const area = document.getElementById('relatorio-area');
+
+            // Garante que o scroll voltará ao topo para uma captura completa
+            window.scrollTo(0, 0);
+
+            setTimeout(() => {
+                html2canvas(area, {
+                    scale: 2, 
+                    useCORS: true,
+                    logging: false,
+                    backgroundColor: "#f8fafc",
+                    scrollY: -window.scrollY,
+                    onclone: (clonedDoc) => {
+                        const clonedArea = clonedDoc.getElementById('relatorio-area');
+                        if (clonedArea) {
+                            clonedArea.style.paddingTop = '20px'; // Margem de segurança superior
+                            clonedArea.style.paddingBottom = '0';
+                            clonedArea.style.margin = '0';
+                        }
+                    }
+                }).then(canvas => {
+                    const imgData = canvas.toDataURL('image/png');
+                    const { jsPDF } = window.jspdf;
+                    
+                    const pdfWidth = 210;
+                    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+                    
+                    // Cria o documento no tamanho EXATO do conteúdo (incluindo o novo padding)
+                    const doc = new jsPDF('p', 'mm', [pdfWidth, pdfHeight]);
+                    
+                    // Adiciona a imagem preenchendo 100% da página
+                    doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight, undefined, 'FAST');
+                    
+                    doc.save('Relatorio_CoenergyGo.pdf');
+                    
+                    btn.innerHTML = originalContent;
+                    btn.disabled = false;
+                });
+            }, 300);
+        };
+
         calculate();
     </script>
 </body>
