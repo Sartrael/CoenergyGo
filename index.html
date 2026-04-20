@@ -248,11 +248,11 @@
                             </span>
                         </div>
                         <div class="table-container overflow-x-auto ${isExpanded ? '' : 'hidden'}">
-                            <table class="w-full text-left border-collapse">
+                            <table class="w-full text-left border-collapse border-spacing-0 border-none">
                                 <thead>
                                     <tr class="bg-slate-50 border-b border-slate-100">
-                                        <th class="px-8 py-5 text-xs font-bold text-slate-400 uppercase tracking-widest sticky left-0 bg-slate-50 min-w-[200px]">Indicadores</th>
-                                        ${horasDia.map(h => `<th class="px-6 py-5 text-sm font-extrabold text-slate-700 text-center bg-orange-50/30">${h}h/dia</th>`).join('')}
+                                        <th class="px-8 py-5 text-xs font-bold text-slate-400 uppercase tracking-widest sticky left-0 bg-slate-50 min-w-[200px] border-none">Indicadores</th>
+                                        ${horasDia.map(h => `<th class="px-6 py-5 text-sm font-extrabold text-slate-700 text-center bg-orange-50/30 border-none">${h}h/dia</th>`).join('')}
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-slate-50">
@@ -297,14 +297,14 @@
         function renderRow(label, calcFn, isMoney, extraClass = "", isPercent = false) {
             return `
                 <tr>
-                    <td class="px-8 py-4 text-xs font-bold text-slate-500 border-r border-slate-50 sticky left-0 bg-white z-10">${label}</td>
+                    <td class="px-8 py-4 text-xs font-bold text-slate-500 border-b border-slate-50 sticky left-0 bg-white z-10 border-r-0">${label}</td>
                     ${horasDia.map(h => {
                         const val = calcFn(h);
                         let display = val;
                         if (isMoney) display = formatter.format(val);
                         else if (isPercent) display = percentFormatter.format(val);
                         else if (typeof val === 'number') display = val.toLocaleString('pt-BR');
-                        return `<td class="px-6 py-4 text-sm text-center ${extraClass}">${display}</td>`;
+                        return `<td class="px-6 py-4 text-sm text-center border-none border-b border-gray-100 ${extraClass}">${display}</td>`;
                     }).join('')}
                 </tr>
             `;
@@ -312,14 +312,14 @@
 
         function renderIndicatorsRow(label, calcFn) {
             return `
-                <tr class="bg-slate-900">
-                    <td class="px-8 py-5 text-xs font-black text-orange-400 uppercase tracking-widest border-r border-slate-800 sticky left-0 bg-slate-900 z-10">${label}</td>
+                <tr class="bg-slate-900 shadow-lg">
+                    <td class="px-8 py-5 text-xs font-black text-orange-400 uppercase tracking-widest border-none sticky left-0 bg-slate-900 z-10">${label}</td>
                     ${horasDia.map(h => {
                         const val = calcFn(h);
                         const display = typeof val === 'number' 
                             ? val.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) 
                             : val;
-                        return `<td class="px-6 py-5 text-base font-black text-white text-center">${display}</td>`;
+                        return `<td class="px-6 py-5 text-base font-black text-white text-center border-none">${display}</td>`;
                     }).join('')}
                 </tr>
             `;
