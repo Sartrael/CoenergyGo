@@ -233,7 +233,7 @@
                 const isExpanded = scenarioStates[cenario.id];
                 
                 const tableHtml = `
-                    <div class="bg-white rounded-3xl shadow-xl shadow-orange-100/50 border border-slate-200 overflow-hidden transition-all duration-300">
+                    <div class="bg-white rounded-3xl shadow-xl shadow-orange-100/50 border border-slate-200 overflow-hidden !pb-0 transition-all duration-300">
                         <div 
                             onclick="toggleScenario(${cenario.id})"
                             class="bg-orange-600 px-8 py-5 flex justify-between items-center bg-gradient-to-r from-orange-600 to-orange-500 cursor-pointer hover:brightness-105 active:brightness-95 transition-all select-none"
@@ -251,7 +251,7 @@
                             </span>
                         </div>
                         <div class="table-container block w-full overflow-x-auto rounded-b-3xl overflow-hidden ${isExpanded ? '' : 'hidden'}">
-                            <table class="w-full min-w-[900px] text-left border-collapse border-spacing-0 border-none">
+                            <table class="w-full min-w-[900px] text-left border-collapse border-spacing-0 border-none !mb-0">
                                 <thead>
                                     <tr class="bg-slate-50 border-b border-slate-100 uppercase tracking-widest">
                                         <th class="px-8 py-5 text-xs font-bold text-slate-400 whitespace-nowrap border-r border-gray-200 min-w-[220px]" style="position: sticky; left: 0; background-color: white; z-index: 999; box-shadow: 2px 0 5px -2px rgba(0,0,0,0.1);">Indicadores</th>
