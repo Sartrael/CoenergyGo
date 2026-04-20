@@ -11,8 +11,10 @@
     <style>
         body { font-family: 'Inter', sans-serif; }
         .input-group:focus-within label { color: #f97316; } /* Laranja Orange-500 */
-        .table-container::-webkit-scrollbar { height: 6px; }
-        .table-container::-webkit-scrollbar-thumb { background: #fdba74; border-radius: 10px; }
+        .table-container::-webkit-scrollbar { height: 8px; }
+        .table-container::-webkit-scrollbar-track { background: #f1f5f9; }
+        .table-container::-webkit-scrollbar-thumb { background: #f97316; border-radius: 10px; }
+        .table-container::-webkit-scrollbar-thumb:hover { background: #ea580c; }
         
         /* Centralização do texto nos inputs e remoção de setas */
         input { text-align: center; }
@@ -250,9 +252,9 @@
                         <div class="table-container overflow-x-auto ${isExpanded ? '' : 'hidden'}">
                             <table class="w-full text-left border-collapse border-spacing-0 border-none">
                                 <thead>
-                                    <tr class="bg-slate-50 border-b border-slate-100">
-                                        <th class="px-8 py-5 text-xs font-bold text-slate-400 uppercase tracking-widest sticky left-0 bg-slate-50 min-w-[200px] border-none">Indicadores</th>
-                                        ${horasDia.map(h => `<th class="px-6 py-5 text-sm font-extrabold text-slate-700 text-center bg-orange-50/30 border-none">${h}h/dia</th>`).join('')}
+                                    <tr class="bg-slate-50 border-b border-slate-100 uppercase tracking-widest">
+                                        <th class="px-8 py-5 text-xs font-bold text-slate-400 sticky left-0 bg-white z-20 whitespace-nowrap border-r border-slate-200 min-w-[220px]">Indicadores</th>
+                                        ${horasDia.map(h => `<th class="px-6 py-5 text-sm font-extrabold text-slate-700 text-center bg-orange-50/30 whitespace-nowrap min-w-[120px]">${h}h/dia</th>`).join('')}
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-slate-50">
@@ -297,14 +299,14 @@
         function renderRow(label, calcFn, isMoney, extraClass = "", isPercent = false) {
             return `
                 <tr>
-                    <td class="px-8 py-4 text-xs font-bold text-slate-500 border-b border-slate-50 sticky left-0 bg-white z-10 border-r-0">${label}</td>
+                    <td class="px-8 py-4 text-xs font-bold text-slate-500 sticky left-0 bg-white z-20 whitespace-nowrap border-r border-slate-200">${label}</td>
                     ${horasDia.map(h => {
                         const val = calcFn(h);
                         let display = val;
                         if (isMoney) display = formatter.format(val);
                         else if (isPercent) display = percentFormatter.format(val);
                         else if (typeof val === 'number') display = val.toLocaleString('pt-BR');
-                        return `<td class="px-6 py-4 text-sm text-center border-none border-b border-gray-100 ${extraClass}">${display}</td>`;
+                        return `<td class="px-6 py-4 text-sm text-center whitespace-nowrap min-w-[120px] ${extraClass}">${display}</td>`;
                     }).join('')}
                 </tr>
             `;
@@ -313,13 +315,13 @@
         function renderIndicatorsRow(label, calcFn) {
             return `
                 <tr class="bg-slate-900 shadow-lg">
-                    <td class="px-8 py-5 text-xs font-black text-orange-400 uppercase tracking-widest border-none sticky left-0 bg-slate-900 z-10">${label}</td>
+                    <td class="px-8 py-5 text-xs font-black text-orange-600 uppercase tracking-widest sticky left-0 bg-white z-20 whitespace-nowrap border-r border-slate-200">${label}</td>
                     ${horasDia.map(h => {
                         const val = calcFn(h);
                         const display = typeof val === 'number' 
                             ? val.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) 
                             : val;
-                        return `<td class="px-6 py-5 text-base font-black text-white text-center border-none">${display}</td>`;
+                        return `<td class="px-6 py-5 text-base font-black text-white text-center whitespace-nowrap min-w-[120px] border-none">${display}</td>`;
                     }).join('')}
                 </tr>
             `;
