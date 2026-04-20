@@ -250,7 +250,7 @@
                                 Custo Energia: R$ ${custoEnergiaKwh.toFixed(2)}
                             </span>
                         </div>
-                        <div class="table-container block w-full overflow-x-auto ${isExpanded ? '' : 'hidden'}">
+                        <div class="table-container block w-full overflow-x-auto rounded-b-3xl overflow-hidden ${isExpanded ? '' : 'hidden'}">
                             <table class="w-full min-w-[900px] text-left border-collapse border-spacing-0 border-none">
                                 <thead>
                                     <tr class="bg-slate-50 border-b border-slate-100 uppercase tracking-widest">
@@ -316,13 +316,14 @@
         function renderIndicatorsRow(label, calcFn) {
             return `
                 <tr class="bg-slate-900 shadow-lg text-white">
-                    <td class="px-8 py-4 text-xs font-black text-orange-600 uppercase tracking-widest whitespace-nowrap border-r border-gray-200" style="position: sticky; left: 0; background-color: #0f172a; z-index: 999; box-shadow: 2px 0 5px -2px rgba(0,0,0,0.1);">${label}</td>
-                    ${horasDia.map(h => {
+                    <td class="px-8 py-4 text-xs font-black text-orange-600 uppercase tracking-widest whitespace-nowrap border-r border-gray-200 rounded-bl-3xl" style="position: sticky; left: 0; background-color: #0f172a; z-index: 999; box-shadow: 2px 0 5px -2px rgba(0,0,0,0.1);">${label}</td>
+                    ${horasDia.map((h, index) => {
                         const val = calcFn(h);
                         const display = typeof val === 'number' 
                             ? val.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) 
                             : val;
-                        return `<td class="px-4 py-4 text-base font-black text-center whitespace-nowrap min-w-[120px] border-none">${display}</td>`;
+                        const isLast = index === horasDia.length - 1;
+                        return `<td class="px-4 py-4 text-base font-black text-center whitespace-nowrap min-w-[120px] border-none ${isLast ? 'rounded-br-3xl' : ''}">${display}</td>`;
                     }).join('')}
                 </tr>
             `;
